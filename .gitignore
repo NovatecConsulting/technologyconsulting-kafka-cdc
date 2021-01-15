@@ -1,0 +1,11 @@
+connectors/
+*.log
+
+*.override.yaml
+*.override.yml
+.env.override
+license.json
+bin/
+.idea
+.showcase-dc-infra
+

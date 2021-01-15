@@ -1,0 +1,40 @@
+#############################################################
+# Deployment of Topics and Connectors                       #
+#############################################################
+---
+version: '2.4'
+services:
+
+  topics-deploy:
+    image: novatec/cp-deploy:${VERSION_CONFLUENT}
+    build:
+      context: .
+      dockerfile: Dockerfile.deploy
+      args:
+        VERSION_CONFLUENT: ${VERSION_CONFLUENT}
+    container_name: topics-deploy
+    restart: on-failure
+    environment:
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+    volumes:
+      - ./kafkatopics/config:/topics-config
+    command:
+      - /topics-config/topics-deploy.sh
+
+
+  connectors-deploy:
+    image: novatec/cp-deploy:${VERSION_CONFLUENT}
+    build:
+      context: .
+      dockerfile: Dockerfile.deploy
+      args:
+        VERSION_CONFLUENT: ${VERSION_CONFLUENT}
+    container_name: connectors-deploy
+    restart: on-failure
+    environment: 
+      CONNECT_REST_API_URL: http://connect:8083
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+    volumes:
+    - ./kafkaconnect/config:/connectors-config
+    command: 
+    - /connectors-config/connectors-deploy.sh

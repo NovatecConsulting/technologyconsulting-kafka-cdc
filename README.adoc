@@ -1,0 +1,11 @@
+## Kafka and Change Data Capture (CDC)
+
+Start all components, create topics and deploy connectors:
+```
+./setup.sh start all
+```
+
+Stop environment:
+```
+./setup.sh down
+```

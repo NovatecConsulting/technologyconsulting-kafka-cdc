@@ -1,0 +1,51 @@
+#############################################################
+# Cli Tools                                            #
+#############################################################
+---
+version: '2.4'
+services:
+
+  ksqldb-cli:
+    image: confluentinc/cp-ksqldb-cli:${VERSION_CONFLUENT}
+    container_name: ksqldb-cli
+    environment: 
+      KSQL_REST_API_URL: http://ksqldb-server:8088
+    volumes:
+    - .:/workspace
+    working_dir: /workspace
+    entrypoint: /bin/bash
+    tty: true
+
+  kafka-cli:  
+    image: novatec/cp-deploy:${VERSION_CONFLUENT}
+    build:
+      context: .
+      dockerfile: Dockerfile.deploy
+      args:
+        VERSION_CONFLUENT: ${VERSION_CONFLUENT}
+    container_name: kafka-cli
+    environment: 
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+    volumes:
+    - .:/workspace
+    working_dir: /workspace
+    tty: true
+
+  workspace:  
+    image: novatec/workspace:${VERSION_CONFLUENT}
+    build:
+      context: .
+      dockerfile: Dockerfile.workspace
+      args:
+        VERSION_CONFLUENT: ${VERSION_CONFLUENT}
+    container_name: workspace
+    environment: 
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      SCHEMAREGISTRY_URL: http://schema-registry:8081
+      KSQLDB_URL: http://ksqldb-server:8088
+      ZOOKEEPER: zookeeper:2181
+      CONNECT_REST_API_URL: http://connect:8083
+    volumes:
+    - .:/workspace
+    working_dir: /workspace
+    tty: true

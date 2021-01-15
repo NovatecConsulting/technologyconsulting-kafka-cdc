@@ -1,0 +1,6 @@
+{
+  "topics": [
+    {"topic": "tc_showcase_sink"},
+    {"topic": "tc_showcase_source"}
+  ]
+}
